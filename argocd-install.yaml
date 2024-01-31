@@ -1,0 +1,45 @@
+
+###################################################################################
+########           HA mode with autoscaling                               #########
+###################################################################################
+
+redis-ha:
+  enabled: true
+
+controller:
+  replicas: 1
+
+server:
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    service:
+       type: LoadBalancer
+
+repoServer:
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+
+applicationSet:
+  replicas: 2
+
+
+###################################################################################
+########               Without HA                                         #########
+###################################################################################
+
+
+#controller:
+#  replicas: 1
+
+#server:
+#  replicas: 1
+#  service:
+#    type: LoadBalancer
+
+#repoServer:
+#  replicas: 1
+
+#applicationSet:
+#  replicaCount: 1
