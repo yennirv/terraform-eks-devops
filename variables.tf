@@ -42,31 +42,20 @@ variable "node_group_min_size" {
   default     = 1
 }
 
-####################################################################
-#
-# Jenkins Settings
-#
-####################################################################
+variable "addons" {
+  type = list(object({
+    name    = string
+    version = string
+  }))
 
-variable "jenkins_admin_user" {
-  type        = string
-  description = "Admin user of the Jenkins Application."
-  default     = "admin"
+  default = [
+    {
+      name    = "aws-ebs-csi-driver"
+      version = "v1.25.0-eksbuild.1"
+    }
+  ]
 }
 
-variable "jenkins_admin_password" {
-  type        = string
-  description = "Admin password of the Jenkins Application."
-  default     = "admin"
-}
 
-####################################################################
-#
-# Argocd Settings
-#
-####################################################################
 
-variable "env" {
-  default = "staging"
-}
 

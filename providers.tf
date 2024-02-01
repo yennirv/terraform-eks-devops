@@ -11,7 +11,7 @@ terraform {
       version = "1.14.0"
     }
   }
-  required_version = "~> 1.5.0"
+  required_version = "~> 1.7.2"
 }
 
 
@@ -20,6 +20,7 @@ provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.demo_eks.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.demo_eks.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.demo_eks.token
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
       args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.demo_eks.name]
