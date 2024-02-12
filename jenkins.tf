@@ -5,7 +5,26 @@ resource "helm_release" "jenkins" {
   repository = "https://charts.jenkins.io"
   chart      = "jenkins"
   version    = "5.0.10"
+    set {
+        name  = "controller.serviceType"
+        value = "LoadBalancer"
+      }
   depends_on = [aws_eks_addon.addons]
 }
 
 
+resource "null_resource" "get_jenkins_password" {
+  provisioner "local-exec" {
+    command = "kubectl get secret --namespace jenkins jenkins -o jsonpath='{.data.jenkins-admin-password}' | base64 --decode >> jenkins_password.txt"
+    interpreter = ["bash", "-c"]
+  }
+}
+
+data "local_file" "jenkins_password_file" {
+  depends_on = [null_resource.get_jenkins_password]
+  filename   = "${path.module}/jenkins_password.txt"
+}
+
+output "jenkins_password" {
+  value = "${data.local_file.jenkins_password_file.content}"
+}

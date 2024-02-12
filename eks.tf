@@ -81,4 +81,8 @@ YAML
  depends_on = [aws_eks_cluster.demo_eks, aws_iam_role.node_instance_role]
 }
 
-
+resource "null_resource" "kubectl" {
+  provisioner "local-exec" {
+    command = "aws eks --region=${var.aws_region} update-kubeconfig --name=${aws_eks_cluster.demo_eks.name}"
+  }
+}
