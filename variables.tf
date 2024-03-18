@@ -56,6 +56,12 @@ variable "addons" {
   ]
 }
 
+variable "deploy_helm_chart" {
+  description = "Set to true to deploy the Helm chart, or false to skip deployment"
+  type        = bool
+  default     = true
+}
+
 
 
 

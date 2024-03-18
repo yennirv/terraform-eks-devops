@@ -1,14 +1,16 @@
 resource "helm_release" "argocd" {
-      namespace        = "argocd"
-      create_namespace = true      
-      name       = "argocd"
-      repository = "https://argoproj.github.io/argo-helm" 
-      chart      = "argo-cd"
-      set {
-        name  = "server.service.type"
-        value = "LoadBalancer"
-      }
-      depends_on = [ aws_eks_addon.addons ]
+  namespace        = "argocd"
+  create_namespace = true
+  name             = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  
+  set {
+    name  = "server.service.type"
+    value = "LoadBalancer"
+  }
+
+  depends_on = [aws_eks_addon.addons]
 }
 
 resource "null_resource" "get_argocd_password" {

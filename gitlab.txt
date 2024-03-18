@@ -1,0 +1,12 @@
+resource "helm_release" "gitlab" {
+  namespace        = "argocd"
+  create_namespace = false
+
+  name       = "gitlab"
+  chart      = "./helm/argocd/argocd-gitlab"
+  version    = "v0.1.1"
+
+  # depends_on = [module.eks, time_sleep.karpenter-provisioner]
+}
+
+

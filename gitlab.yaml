@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: gitlab
+spec:
+  syncPolicy:
+    automated:
+      prune: false 
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+  project: resources-cluster
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitlab
+  source:
+    repoURL: https://charts.gitlab.io  # Can point to either a Helm chart repo or a git repo.
+    targetRevision: "7.6.1"   # For Helm, this refers to the chart version.
+    chart: gitlab   # Set this when pulling directly from a Helm repo. DO NOT set for git-hosted Helm charts.
+    helm: 
+      passCredentials: false # If true then adds --pass-credentials to Helm commands to pass credentials to all domains
+      ignoreMissingValueFiles: false
+      valuesObject:
+        global:
+         hosts:
+          domain: explora.toolchain.mx
+          https: true
+          gitlab: {}
+          #externalIP: 35.225.196.151 #Replace by your Nginx Ingress ExternalIP
+          ssh: ~
+         gitlab:
+          name: gitlab.explora.toolchain.mx
+          https: true
+         registry:
+          name: gitlab-registry.explora.toolchain.mx
+          https: false
+         ingress:
+          configureCertmanager: false
+          class: "nginx"
+          enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod-http
+          tls:
+           enabled: true
+           secretName: gitlab-secret
+        certmanager:
+          install: false
+        nginx-ingress:
+          enabled: false
+        prometheus:
+          install: false
+        redis:
+          install: true
+        postgresql:
+          install: true
+        gitlab-runner:
+          install: false
+        registry:
+          enable: false
