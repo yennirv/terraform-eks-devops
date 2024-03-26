@@ -38,13 +38,13 @@ resource "aws_eks_cluster" "demo_eks" {
   name     = var.cluster_name
   role_arn = aws_iam_role.demo_eks.arn
 
-  vpc_config {
+   vpc_config {
     subnet_ids = [
       data.aws_subnets.public.ids[0],
       data.aws_subnets.public.ids[1],
       data.aws_subnets.public.ids[2]
-    ]
-  }
+      ]
+   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
@@ -86,3 +86,5 @@ resource "null_resource" "kubectl" {
     command = "aws eks --region=${var.aws_region} update-kubeconfig --name=${aws_eks_cluster.demo_eks.name}"
   }
 }
+
+

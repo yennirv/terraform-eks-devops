@@ -24,6 +24,7 @@ data "aws_subnets" "public" {
     name   = "vpc-id"
     values = [data.aws_vpc.default_vpc.id]
   }
+  
   filter {
     name = "availability-zone"
     values = [
@@ -33,8 +34,10 @@ data "aws_subnets" "public" {
     ]
   }
 }
+ 
 
 # Get AMI ID for latest recommended Amazon Linux 2 image
 data "aws_ssm_parameter" "node_ami" {
   name = "/aws/service/eks/optimized-ami/1.24/amazon-linux-2/recommended/image_id"
 }
+

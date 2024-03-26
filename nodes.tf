@@ -212,13 +212,14 @@ resource "time_sleep" "wait_30_seconds" {
   create_duration = "30s"
 }
 
+
 # Defer to CloudFormation here to create AutoScalingGroup
 # as the terraform ASG resource does not support UpdatePolicy
 resource "aws_cloudformation_stack" "autoscaling_group" {
   depends_on = [
     time_sleep.wait_30_seconds
   ]
-  name          = "eks-cluster-stack"
+  name = "eks-cluster-stack"
   template_body = <<EOF
 Description: "Node autoscaler"
 Resources:
@@ -247,3 +248,4 @@ Outputs:
     Value: !Ref NodeGroup
   EOF
 }
+
